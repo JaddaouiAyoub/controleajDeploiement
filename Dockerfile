@@ -1,30 +1,14 @@
-# Use a base image with Java and Maven
-FROM openjdk:17-jdk-slim AS builder
+FROM maven:3.8.4-openjdk-17 AS builder
 
-# Set the working directory
+# Définissez le répertoire de travail dans le conteneur
 WORKDIR /app
+COPY . /app/
+RUN mvn clean package
 
-# Copy the Maven wrapper and pom.xml
-COPY mvnw .
-COPY pom.xml .
-
-# Copy the application code
-COPY src src
-
-# Build the application
-RUN ./mvnw clean package -DskipTests
-
-# Use a smaller base image for the runtime
-FROM openjdk:17-jdk-slim
-
-# Set the working directory
+#
+FROM openjdk:17-alpine
+# Définissez le répertoire de travail dans le conteneur
 WORKDIR /app
-
-# Copy the packaged jar file from the builder stage
-COPY --from=builder /app/target/*.jar app.jar
-
-# Expose the port the application will run on
+COPY --from=builder /app/target/*.jar /app/app.jar
 EXPOSE 8080
-
-# Start the application
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
