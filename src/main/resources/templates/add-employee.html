@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Employee</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container my-5">
+    <h1 class="mb-4">Add Employee</h1>
+    <form th:action="@{/employees/add}" th:object="${employee}" method="post">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" th:field="*{email}" required>
+        </div>
+
+            <div class="form-group">
+                <label for="skillsInput">Skills (comma-separated)</label>
+                <input type="text" class="form-control" id="skillsInput" th:field="*{skills}">
+            </div>
+
+        <div class="form-group">
+            <label for="post">Post</label>
+            <select class="form-control" id="post" th:field="*{post}" required>
+                <option th:each="p : ${T(test.test.Post).values()}" th:value="${p}" th:text="${p.name()}"></option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+</body>
+</html>

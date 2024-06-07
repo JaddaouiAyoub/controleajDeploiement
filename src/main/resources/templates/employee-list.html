@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Liste des employés</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"/>
+    <style>
+        .no-bullets {
+            list-style: none;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">Liste des employés</h1>
+    <div class="text-center">
+        <a th:href="@{/employees/add}">Add Employee</a>
+        <span> | </span>
+        <a th:href="@{/assignT}">Affecter Employee</a>
+    </div>
+    <hr/>
+<!--    <div class="text-center" th:if="${not #strings.isEmpty(suppression)}">-->
+<!--        <div class="alert alert-success" th:text="${suppression}"></div>-->
+<!--    </div>-->
+    <table class="table" border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Skills</th>
+            <th>Projects</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.id}"></td>
+            <td th:text="${employee.name}"></td>
+            <td th:text="${employee.email}"></td>
+            <td>
+                <ul>
+                    <li th:each="skill : ${employee.getSkills}" class="no-bullets" th:text="${skill}"></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li th:each="project : ${employee.getProjectAssignments()}" class="no-bullets" th:text="${project}">
+                </ul>
+            </td>
+            <td>
+                <a th:href="@{/employees/delete/{id}(id=${employee.getId()})}" class="btn btn-danger">remove</a>            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
